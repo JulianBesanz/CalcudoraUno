@@ -1,24 +1,36 @@
-from flask import Flask, request
+from flask import Flask, request, render_template
 from operaciones import sumar
-
+from operaciones import restar
+from operaciones import multiplicar
+from operaciones import dividir 
+import random 
+from livereload import Server
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return '''
-    <h1> APLICACION DE CALCULADORA </h1>
-    <a href="/suma?num1=5&num2=4">ir a pagina de suma </a>
-    
+    return render_template("home.html")
 
-
-
-'''
 
 @app.route("/suma")
 def ruta_suma():
-    num1 = request.args.get("num1", type=float)
-    num2 = request.args.get("num2", type=float)
+    num1 = random.randint(1, 10)
+    num2 = random.randint(1, 20)
     if num1 is None or num2 is None:
         return "faltan datos"
 
-    return f"la suma de num1 y num2 es {sumar(num1, num2)}"
+    return f"la suma de num1 y num2 es {sumar(num1, num2) }"
+
+@app.route("/resta")
+def ruta_restar():
+    num1 = request.args.get(1,20)
+    num2 = request.args.get(1,20)
+    if num1 is None or num2 is None:
+        return "faltan datos"
+
+    return f"la suma de num1 y num2 es {restar(num1, num2) }"
+
+
+if __name__ == "__main__":
+    server = Server(app.wsgi_app)
+    server.serve()
